@@ -1,10 +1,11 @@
-from school.models import User, VirtualClass, Question, Exam
+from school.models import User, VirtualClass, Question, Exam, Result
 
 from school.serializers import (
     UserSerializer,
     VirtualClassSerializer,
     QuestionSerializer,
     ExamSerializer,
+    ResultSerializer,
 )
 
 from rest_framework import generics
@@ -48,3 +49,13 @@ class ExamListCreate(generics.ListCreateAPIView):
 class ExamRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Exam.objects.all()
     serializer_class = ExamSerializer
+
+
+class ResultListCreate(generics.ListCreateAPIView):
+    queryset = Result.objects.all()
+    serializer_class = ResultSerializer
+
+
+class ResultRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Result.objects.all()
+    serializer_class = ResultSerializer

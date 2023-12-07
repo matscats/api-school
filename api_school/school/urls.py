@@ -7,6 +7,8 @@ from school.views import (
     QuestionRetrieveUpdateDestroy,
     ExamListCreate,
     ExamRetrieveUpdateDestroy,
+    ResultListCreate,
+    ResultRetrieveUpdateDestroy,
 )
 from django.urls import path
 
@@ -19,4 +21,6 @@ urlpatterns = [
     path("question/<int:pk>/", QuestionRetrieveUpdateDestroy.as_view()),
     path("exam/", ExamListCreate.as_view()),
     path("exam/<int:pk>/", ExamRetrieveUpdateDestroy.as_view()),
+    path("result/", ResultListCreate.as_view()),
+    path("result/<int:pk>", ResultRetrieveUpdateDestroy.as_view()),
 ]

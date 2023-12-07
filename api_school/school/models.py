@@ -58,7 +58,7 @@ class Question(models.Model):
 
 class Exam(models.Model):
     questions = models.ManyToManyField(Question)
-    users = models.ManyToManyField(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 
 class Result(models.Model):
@@ -67,3 +67,4 @@ class Result(models.Model):
     score = models.IntegerField(
         validators=[MaxValueValidator(10), MinValueValidator(0)]
     )
+    exam_done = models.BooleanField(default=False)
