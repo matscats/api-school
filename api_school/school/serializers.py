@@ -1,6 +1,5 @@
 from school.models import User, VirtualClass, Question, Exam, Result
 from rest_framework import serializers
-import random
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -8,6 +7,9 @@ class UserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
     is_staff = serializers.BooleanField(required=False)
     extra_kwargs = {"password": {"write_only": True}}
+    virtual_class = serializers.PrimaryKeyRelatedField(
+        queryset=VirtualClass.objects.all()
+    )
 
     class Meta:
         model = User
@@ -25,12 +27,21 @@ class UserSerializer(serializers.ModelSerializer):
             name=validated_data["name"],
             last_name=validated_data["last_name"],
             password=validated_data["password"],
+            virtual_class=validated_data["virtual_class"],
         )
         if "is_staff" in validated_data and validated_data["is_staff"]:
             user.is_staff = validated_data["is_staff"]
-        if "is_student" in validated_data and validated_data["is_student"]:
+        if validated_data["is_student"] and validated_data["is_teacher"]:
+            raise serializers.ValidationError(
+                "Um Usuário não pode ser aluno e professor ao mesmo tempo."
+            )
+        if not validated_data["is_student"] and not validated_data["is_teacher"]:
+            raise serializers.ValidationError(
+                "Um usuário deve obrigatoriamente ser aluno ou professor."
+            )
+        if validated_data["is_student"]:
             user.is_student = validated_data["is_student"]
-        if "is_teacher" in validated_data and validated_data["is_teacher"]:
+        if validated_data["is_teacher"]:
             user.is_teacher = validated_data["is_teacher"]
         user.save()
         return user

@@ -27,8 +27,11 @@ class User(AbstractBaseUser):
     cpf = models.CharField(max_length=11)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_student = models.BooleanField(default=False)
-    is_teacher = models.BooleanField(default=False)
+    is_student = models.BooleanField(default=False, null=False, blank=False)
+    is_teacher = models.BooleanField(default=False, null=False, blank=False)
+    virtual_class = models.ForeignKey(
+        "VirtualClass", null=True, on_delete=models.CASCADE
+    )
 
     objects = UserManager()
 
