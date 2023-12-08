@@ -92,29 +92,19 @@ class ExamSerializer(serializers.ModelSerializer):
 
 
 class ResultSerializer(serializers.ModelSerializer):
+    exam = serializers.PrimaryKeyRelatedField(queryset=Exam.objects.all())
+
     class Meta:
         model = Result
         fields = "__all__"
 
     def create(self, validated_data):
         exam = validated_data["exam"]
-        user = validated_data["user"]
 
-        result = Result.objects.filter(exam=exam, user=user).first()
-        if result:
-            if result.answered:
-                raise serializers.ValidationError(
-                    "O usuário já respondeu a este exame."
-                )
-            else:
-                score = 10
-                result.score = score
-                result.answered = True
-                result.save()
-                return result
+        if exam.is_done:
+            raise serializers.ValidationError("O Resultado para este exame já existe")
 
-        # Se o usuário não respondeu, crie um novo Result
-        score = 10
-        result = Result.objects.create(exam=exam, user=user, score=score, answered=True)
-
+        exam.is_done = True
+        result = Result(exam=exam, score=10)
+        result.save()
         return result
