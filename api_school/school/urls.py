@@ -9,6 +9,7 @@ from school.views import (
     ExamRetrieveUpdateDestroy,
     ResultListCreate,
     ResultRetrieveUpdateDestroy,
+    ExamCorrection,
 )
 from django.urls import path
 
@@ -23,4 +24,5 @@ urlpatterns = [
     path("exam/<int:pk>/", ExamRetrieveUpdateDestroy.as_view()),
     path("result/", ResultListCreate.as_view()),
     path("result/<int:pk>", ResultRetrieveUpdateDestroy.as_view()),
+    path("exam/<int:pk>/send/", ExamCorrection.as_view()),
 ]

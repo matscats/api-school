@@ -116,6 +116,6 @@ class ResultSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("O Resultado para este exame já existe")
 
         exam.is_done = True
-        result = Result(exam=exam, score=10)
+        result = Result(exam=exam)
         result.save()
         return result
