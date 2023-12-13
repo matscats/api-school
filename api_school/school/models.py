@@ -30,7 +30,7 @@ class User(AbstractBaseUser):
     is_student = models.BooleanField(default=False, null=False, blank=False)
     is_teacher = models.BooleanField(default=False, null=False, blank=False)
     virtual_class = models.ForeignKey(
-        "VirtualClass", null=True, on_delete=models.CASCADE
+        "VirtualClass", null=True, on_delete=models.CASCADE, blank=True
     )
 
     objects = UserManager()
