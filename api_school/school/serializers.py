@@ -1,4 +1,4 @@
-from school.models import User, VirtualClass, Question, Exam, Result
+from school.models import User, VirtualClass, Question, Exam
 from rest_framework import serializers
 
 
@@ -100,22 +100,3 @@ class ExamSerializer(serializers.ModelSerializer):
 
         exam.save()
         return exam
-
-
-class ResultSerializer(serializers.ModelSerializer):
-    exam = serializers.PrimaryKeyRelatedField(queryset=Exam.objects.all())
-
-    class Meta:
-        model = Result
-        fields = "__all__"
-
-    def create(self, validated_data):
-        exam = validated_data["exam"]
-
-        if exam.is_done:
-            raise serializers.ValidationError("O Resultado para este exame já existe")
-
-        exam.is_done = True
-        result = Result(exam=exam)
-        result.save()
-        return result

@@ -64,10 +64,6 @@ class Exam(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     user_answers = models.JSONField(null=True, blank=True)
     is_done = models.BooleanField(default=False)
-
-
-class Result(models.Model):
-    exam = models.ForeignKey(Exam, on_delete=models.CASCADE, null=True)
     score = models.IntegerField(
         validators=[MaxValueValidator(10), MinValueValidator(0)], null=True
     )

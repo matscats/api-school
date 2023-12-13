@@ -1,11 +1,10 @@
-from school.models import User, VirtualClass, Question, Exam, Result
+from school.models import User, VirtualClass, Question, Exam
 
 from school.serializers import (
     UserSerializer,
     VirtualClassSerializer,
     QuestionSerializer,
     ExamSerializer,
-    ResultSerializer,
 )
 
 from rest_framework import generics
@@ -96,16 +95,13 @@ class ExamCorrection(APIView):
                 )
 
         exam.is_done = True
-        result = Result(exam=exam, score=correct_answers)
-        result.save()
+        exam.score = correct_answers
+        exam.save()
 
         exam.user_answers = {
             "correct_answers": correct_answers,
             "wrong_answers": wrong_answers,
         }
-
-        exam.result = result
-        exam.save()
 
         return Response(
             {
@@ -114,13 +110,3 @@ class ExamCorrection(APIView):
             },
             status=status.HTTP_200_OK,
         )
-
-
-class ResultListCreate(generics.ListCreateAPIView):
-    queryset = Result.objects.all()
-    serializer_class = ResultSerializer
-
-
-class ResultRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Result.objects.all()
-    serializer_class = ResultSerializer
